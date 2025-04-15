@@ -118,6 +118,10 @@ public class Board {
                 return false;
             }
         }
+
+        //check for the current block
+
+
         return true;
     }
 
