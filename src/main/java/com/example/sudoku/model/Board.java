@@ -14,7 +14,7 @@ import java.util.Random;
  * The board is represented as a list of lists (ArrayLists) rather than using arrays,
  * and the board is generated using a backtracking algorithm that works block by block.
  *
- * Java JDK 17.
+ * Java JDK 17. #creandorama2
  */
 public class Board {
     // Board dimensions and block dimensions.
