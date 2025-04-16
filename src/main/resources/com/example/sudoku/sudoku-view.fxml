@@ -40,8 +40,6 @@
             <HBox prefHeight="100.0" prefWidth="272.0">
                <children>
                   <Button fx:id="helpButton" alignment="CENTER" mnemonicParsing="false" text="Ayuda" />
-                  <Label text="Vidas disponibles:" />
-                  <Label fx:id="hintAvailable" text="3" />
                </children>
             </HBox>
          </children>

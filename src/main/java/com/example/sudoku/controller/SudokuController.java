@@ -31,7 +31,6 @@ public class SudokuController {
     public void initialize() {
         fillBoard();
         setupHelpButton();
-        updateHelpButtonText();
     }
 
     private void fillBoard() {
@@ -101,13 +100,8 @@ public class SudokuController {
 
         // Hacer que la celda ayudada no sea editable
         helpCell.setEditable(false);
-        helpsRemaining--;
-        updateHelpButtonText();
     }
 
-    private void updateHelpButtonText() {
-        hintAvailable.setText(String.valueOf(helpsRemaining));
-    }
 
     private List<Integer> getValidNumbers(int row, int col) {
         List<Integer> validNumbers = new ArrayList<>();
