@@ -10,6 +10,8 @@ public class SudokuController {
     @FXML
     private GridPane boardGridPane;
 
+
+
     private Board board;
 
     @FXML
@@ -36,18 +38,51 @@ public class SudokuController {
                 boardGridPane.setRowIndex(textField, row);
                 boardGridPane.setColumnIndex(textField, col);
                 boardGridPane.getChildren().add(textField);
-                handleNumberTextField(textField);
+                handleNumberTextField(textField,row,col,board);
+                helpButton(board);
+
             }
         }
     }
 
-    /***
+    private void helpButton(Board board) {
+
+
+    }
+
+    /**
+     *Method which validates in real time that the typed numbers follow the rules of sudoku.
      *
-     * */
-    private void handleNumberTextField(TextField textField) {
-        textField.setOnKeyReleased(event -> {
-            System.out.println(textField.getText());
+     *
+     **/
+    private void handleNumberTextField(TextField textField, int row, int col, Board board) {
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            // Permitir solo vacío o número del 1 al 6
+            if (!newValue.matches("[1-6]?")) {
+                textField.setText(oldValue); // Revertir al valor anterior
+                return;
+            }
+
+            if (newValue.isEmpty()) {
+                // Campo vacío: limpiar celda
+                board.getBoard().get(row).set(col, 0);
+                textField.setStyle(""); // Estilo normal
+            } else {
+                int value = Integer.parseInt(newValue);
+
+
+                // Validar con las reglas del Sudoku
+                if (board.isValid(row, col, value)) {
+                    textField.setStyle("-fx-background-color: lightgreen;");
+                    board.getBoard().get(row).set(col, value);
+                    textField.setEditable(false);
+                } else {
+                    textField.setStyle("-fx-background-color: lightcoral;");
+                    System.out.println("Error");
+                }
+            }
         });
     }
+
 
 }

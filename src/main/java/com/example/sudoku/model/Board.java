@@ -105,7 +105,7 @@ public class Board {
      * @param candidate the number to place (from 1 to 6).
      * @return true if the candidate can be placed without conflict; false otherwise.
      */
-    private boolean isValid(int row, int col, int candidate) {
+    public boolean isValid(int row, int col, int candidate) {
         // Check the current row for an existing occurrence of the candidate.
         for (int j = 0; j < SIZE; j++) {
             if (board.get(row).get(j) == candidate) {
@@ -120,9 +120,19 @@ public class Board {
         }
 
         //check for the current block
-
+        int blockStartRow = (row / BLOCK_ROWS) * BLOCK_ROWS;
+        int blockStartCol = (col / BLOCK_COLS) * BLOCK_COLS;
+        for (int i = blockStartRow; i < blockStartRow + BLOCK_ROWS; i++) {
+            for (int j = blockStartCol; j < blockStartCol + BLOCK_COLS; j++) {
+                if (board.get(i).get(j) == candidate) {
+                    return false;
+                }
+            }
+        }
 
         return true;
+
+
     }
 
     /**
