@@ -14,8 +14,9 @@ public interface SudokuControllerInterface {
 
     void initialize();
 
+    void fillBoard();
 
-    void handleNumberTextField(TextField textField, int row, int col, Board board);
+    void handleNumberTextField(TextField textField, int row, int col);
 
 
     void revalidateBoard();

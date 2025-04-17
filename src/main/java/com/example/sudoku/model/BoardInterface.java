@@ -5,6 +5,7 @@ import java.util.List;
 
 public interface BoardInterface {
 
+    boolean fillBlocks(int blockIndex);
 
     boolean isValid(int row, int col, int candidate);
 
@@ -13,4 +14,6 @@ public interface BoardInterface {
 
 
     List<List<Integer>> getBoard();
+
+    int[] getHint ();
 }

@@ -15,7 +15,8 @@ import java.util.Random;
  * and the board is generated using a backtracking algorithm that works block by block.
  * Java JDK 17.
  */
-public class Board implements BoardInterface {
+public class Board extends BoardAdapter {
+
     // Board dimensions and block dimensions.
     private final int SIZE = 6;
     private final int BLOCK_ROWS = 2;
@@ -29,6 +30,7 @@ public class Board implements BoardInterface {
     // The board represented as a List of Lists (each inner list is a row)
     private final List<List<Integer>> board;
     private final Random random = new Random();
+
 
     /**
      * Constructor initializes the board with zeros and then fills each block with one number.
@@ -48,6 +50,8 @@ public class Board implements BoardInterface {
             System.out.println("Failed to generate the Sudoku board.");
         }
     }
+
+
 
     /**
      * Recursively fills each 2x3 block with one number.
@@ -96,6 +100,8 @@ public class Board implements BoardInterface {
         return false;
     }
 
+
+
     /**
      * Checks whether placing a candidate number at cell (row, col) violates the row or column uniqueness.
      *
@@ -134,6 +140,8 @@ public class Board implements BoardInterface {
 
     }
 
+
+
     /**
      * Prints the generated board to the console.
      */
@@ -146,6 +154,8 @@ public class Board implements BoardInterface {
         }
     }
 
+
+
     /**
      * Returns the generated board.
      *
@@ -154,4 +164,36 @@ public class Board implements BoardInterface {
     public List<List<Integer>> getBoard() {
         return board;
     }
+
+
+
+    /**
+     *Returns where the integer that helps the user.
+     *
+     * @return an array of integers (hint number row ,hint number column, hint number)
+     */
+    public int[] getHint() {
+
+        List<int[]> possibleHints = new ArrayList<>();
+
+        for (int row = 0; row < SIZE; row++) {
+            for (int col = 0; col < SIZE; col++) {
+                if (board.get(row).get(col) == 0) {
+                    for (int num = 1; num <= SIZE; num++) {
+                        if (isValid(row, col, num)) {
+                            possibleHints.add(new int[]{row, col, num});
+                        }
+                    }
+                }
+            }
+        }
+
+        if (possibleHints.isEmpty()) {
+            return null;
+        }
+
+        Random random = new Random();
+        return possibleHints.get(random.nextInt(possibleHints.size()));
+    }
+
 }

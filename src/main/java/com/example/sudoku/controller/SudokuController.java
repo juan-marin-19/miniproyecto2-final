@@ -3,6 +3,7 @@ package com.example.sudoku.controller;
 import com.example.sudoku.model.Board;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.animation.FadeTransition;
@@ -24,23 +25,32 @@ public class SudokuController implements SudokuControllerInterface {
     @FXML
     private Label errorMessage;
 
+    @FXML
+    private Button helpButton;
+
     private Board board;
+
+
 
     /**
      * Initializes the controller after the FXML file has been loaded.
      * Calls the method to fill the Sudoku board.
+     * Implements a button event.
      */
     @FXML
     public void initialize() {
+        board = new Board();
         fillBoard();
+        helpButton.setOnAction(e -> handleHelp());
     }
+
+
 
     /**
      * Fills the Sudoku board with TextFields. Some cells will show pre-filled numbers,the others will be empty and editable.
      * Also connects each editable cell to real-time validation.
      */
     public void fillBoard() {
-        board = new Board();
         for (int row = 0; row < board.getBoard().size(); row++) {
             for (int col = 0; col < board.getBoard().size(); col++) {
                 int number = board.getBoard().get(row).get(col);
@@ -61,8 +71,8 @@ public class SudokuController implements SudokuControllerInterface {
                 boardGridPane.setRowIndex(textField, row);
                 boardGridPane.setColumnIndex(textField, col);
                 boardGridPane.getChildren().add(textField);
-                handleNumberTextField(textField,row,col,board);
-                helpButton(board);
+                handleNumberTextField(textField,row,col);
+
 
             }
         }
@@ -70,9 +80,38 @@ public class SudokuController implements SudokuControllerInterface {
 
 
 
-    public void helpButton(Board board) {
+    /**
+     * Handles the action of the help button to display the hint number.
+     */
+    public void handleHelp() {
+        int[] hint = board.getHint();
+        if (hint == null) {
+            showMessageAndFade(errorMessage, "¡No hay más ayudas disponibles!");
+            return;
+        }
 
+        int row = hint[0];
+        int col = hint[1];
+        int value = hint[2];
+
+        for (javafx.scene.Node node : boardGridPane.getChildren()) {
+            if (node instanceof TextField) {
+                Integer nodeRow = GridPane.getRowIndex(node);
+                Integer nodeCol = GridPane.getColumnIndex(node);
+
+                if (nodeRow == row && nodeCol == col) {
+                    TextField tf = (TextField) node;
+                    tf.setText(String.valueOf(value));
+                    board.getBoard().get(row).set(col, value);
+                    revalidateBoard();
+                    break;
+                }
+            }
+            }
     }
+
+
+
 
     /**
      * Connects a TextField to real-time validation logic.
@@ -82,9 +121,10 @@ public class SudokuController implements SudokuControllerInterface {
      * @param textField the field where the user types
      * @param row the row index of the cell
      * @param col the column index of the cell
-     * @param board the current Sudoku board
+     *
      */
-    public void handleNumberTextField(TextField textField, int row, int col, Board board) {
+    public void handleNumberTextField(TextField textField, int row, int col) {
+
         revalidateBoard();
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("[1-6]?")) {
@@ -105,11 +145,14 @@ public class SudokuController implements SudokuControllerInterface {
     }
 
 
+
+
     /**
      * Validates all cells on the board after a change, Updating the color of each cell depending on whether
      * it follows the Sudoku rules, Also shows a temporary error message if a rule is broken.
      */
     public void revalidateBoard() {
+
         for (javafx.scene.Node node : boardGridPane.getChildren()) {
             if (node instanceof TextField) {
                 TextField tf = (TextField) node;
@@ -140,8 +183,10 @@ public class SudokuController implements SudokuControllerInterface {
     }
 
 
+
+
     /**
-     * Displays the error message if a rule is broken.
+     * Displays a message if a rule is broken or the user has run out of hints.
      *
      * @param label the Label where the message is shown
      * @param message the text to display
