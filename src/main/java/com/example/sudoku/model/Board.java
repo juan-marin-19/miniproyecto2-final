@@ -15,7 +15,7 @@ import java.util.Random;
  * and the board is generated using a backtracking algorithm that works block by block.
  * Java JDK 17.
  */
-public class Board {
+public class Board implements BoardInterface {
     // Board dimensions and block dimensions.
     private final int SIZE = 6;
     private final int BLOCK_ROWS = 2;
@@ -55,7 +55,7 @@ public class Board {
      * @param blockIndex the index of the current block (ranging from 0 to TOTAL_BLOCKS - 1).
      * @return true if all blocks have been successfully filled; false otherwise.
      */
-    private boolean fillBlocks(int blockIndex) {
+    public boolean fillBlocks(int blockIndex) {
         // If all blocks have been processed, the board is complete.
         if (blockIndex == TOTAL_BLOCKS) {
             return true;

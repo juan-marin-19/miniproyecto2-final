@@ -16,7 +16,7 @@ import javafx.scene.control.Label;
  * handling user input, validating Sudoku rules in real time,
  * and showing error messages with fade effect.
  */
-public class SudokuController {
+public class SudokuController implements SudokuControllerInterface {
 
     @FXML
     private GridPane boardGridPane;
@@ -39,7 +39,7 @@ public class SudokuController {
      * Fills the Sudoku board with TextFields. Some cells will show pre-filled numbers,the others will be empty and editable.
      * Also connects each editable cell to real-time validation.
      */
-    private void fillBoard() {
+    public void fillBoard() {
         board = new Board();
         for (int row = 0; row < board.getBoard().size(); row++) {
             for (int col = 0; col < board.getBoard().size(); col++) {
@@ -70,8 +70,7 @@ public class SudokuController {
 
 
 
-    private void helpButton(Board board) {
-
+    public void helpButton(Board board) {
 
     }
 
@@ -80,12 +79,12 @@ public class SudokuController {
      * Checks if the number typed by the user is between 1 and 6,
      * and updates the board data.
      *
-     * @param textField the cell where the user types a number
+     * @param textField the field where the user types
      * @param row the row index of the cell
      * @param col the column index of the cell
      * @param board the current Sudoku board
      */
-    private void handleNumberTextField(TextField textField, int row, int col, Board board) {
+    public void handleNumberTextField(TextField textField, int row, int col, Board board) {
         revalidateBoard();
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("[1-6]?")) {
@@ -110,7 +109,7 @@ public class SudokuController {
      * Validates all cells on the board after a change, Updating the color of each cell depending on whether
      * it follows the Sudoku rules, Also shows a temporary error message if a rule is broken.
      */
-    private void revalidateBoard() {
+    public void revalidateBoard() {
         for (javafx.scene.Node node : boardGridPane.getChildren()) {
             if (node instanceof TextField) {
                 TextField tf = (TextField) node;
